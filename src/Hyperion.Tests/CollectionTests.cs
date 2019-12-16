@@ -155,11 +155,26 @@ namespace Hyperion.Tests
         [Fact]
         public void CanSerializeIntArray()
         {
-            var expected = Enumerable.Range(0, 10000).ToArray();
-            Serialize(expected);
-            Reset();
-            var actual = Deserialize<int[]>();
-            Assert.Equal(expected, actual);
+            int [] intArray = new[] { 1 };
+
+            var somethings = new[]
+                {
+                    new Something
+                    {
+                        BoolProp = true,
+                        Else = new Else
+                        {
+                            Name = "Yoho"
+                        },
+                        Int32Prop = 999,
+                        StringProp = "Yesbox!"
+                    },
+                    new Something(), new Something(), null
+                };
+
+            Serialize(intArray);
+            Serialize(somethings);
+
         }
 
         [Fact]
