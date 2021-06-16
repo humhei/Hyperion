@@ -25,17 +25,20 @@ namespace Hyperion
             ignoreISerializable: false,
             packageNameOverrides: null);
 
+        private static readonly bool isRunTime_FullNetFramework = 
+                System.Environment.Version.ToString().StartsWith("4.0.30319.");
+        
         internal static List<Func<string, string>> DefaultPackageNameOverrides()
         {
             return new List<Func<string, string>>
             {
 #if NET45
-                str => str.Contains("System.Private.CoreLib,%core%")
-                    ? str.Replace("System.Private.CoreLib,%core%", "mscorlib,%core%") 
+                str => str.Contains("System.Private.CoreLib,%core%") 
+                    ? str.Replace("System.Private.CoreLib,%core%", "mscorlib,%core%")
                     : str
 #elif NETSTANDARD
-                str => str.Contains("mscorlib,%core%")
-                    ? str.Replace("mscorlib,%core%", "System.Private.CoreLib,%core%") 
+                str => str.Contains("mscorlib,%core%") && !isRunTime_FullNetFramework
+                    ? str.Replace("mscorlib,%core%", "System.Private.CoreLib,%core%")
                     : str
 #endif
             };
